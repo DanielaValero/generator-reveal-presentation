@@ -8,8 +8,7 @@ var fs = require( 'fs-extra' );
 describe( 'Presentation Generator', function() {
 
   var appName = 'barbara';
-  var testDir = path.join( __dirname, 'tmp1/' );
-  var testDir2 = path.join( __dirname, 'tmp2/' );
+  var testDir = path.join( __dirname, 'tmp/' );
 
 
   beforeEach( function( done ) {
@@ -65,7 +64,7 @@ describe( 'Presentation Generator', function() {
     };
 
     helpers.run( path.join( __dirname, '../app' ) )
-      .inDir( testDir2 )
+      .inDir( testDir )
       .withArguments( [ appName ] )
       .withOptions( [ '--skip-install', '--skip-message' ] )
       .withPrompts( mockPrompt2 )
