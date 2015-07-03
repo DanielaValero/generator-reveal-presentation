@@ -7,20 +7,25 @@ var fs = require( 'fs-extra' );
 
 describe( 'Presentation Generator', function() {
 
-  /*
-     File creation test
-     ========================================================================== */
+  var appName = 'barbara';
+  var testDir = path.join( __dirname, 'tmp1/' );
+  var testDir2 = path.join( __dirname, 'tmp2/' );
 
-  before( function( done ) {
-    var appName = 'barbara';
-    var testDir = path.join( __dirname, 'tmp/' );
 
+  beforeEach( function( done ) {
     fs.remove( testDir, function( err ) {
       if ( err ) {
         console.error( err );
       }
     } );
+  } );
 
+
+  /*
+     File creation test
+     ========================================================================== */
+
+  before( function( done ) {
     var mockPrompt1 = {
       presentorPage: 'y',
       talkTitle: 'Foo bar baz',
@@ -52,24 +57,24 @@ describe( 'Presentation Generator', function() {
   /*
      Multiplex test
      ========================================================================== */
-  // before( function( done ) {
-  //   var mockPrompt2 = {
-  //     presentorPage: 'y',
-  //     talkTitle: 'Foo bar baz',
-  //     revealSettings: [ 'remote' ]
-  //   };
+  before( function( done ) {
+    var mockPrompt2 = {
+      presentorPage: 'y',
+      talkTitle: 'Foo bar baz',
+      revealSettings: [ 'remote' ]
+    };
 
-  //   helpers.run( path.join( __dirname, '../app' ) )
-  //     .inDir( testDir )
-  //     .withArguments( [ appName ] )
-  //     .withOptions( [ '--skip-install', '--skip-message' ] )
-  //     .withPrompts( mockPrompt2 )
-  //     .on( 'end', done );
-  // } );
+    helpers.run( path.join( __dirname, '../app' ) )
+      .inDir( testDir2 )
+      .withArguments( [ appName ] )
+      .withOptions( [ '--skip-install', '--skip-message' ] )
+      .withPrompts( mockPrompt2 )
+      .on( 'end', done );
+  } );
 
-  // it( 'Create a presentation without multiplex if the user does not select that option', function( done ) {
-  //   assert.fileContent( 'config.yml', /multiplex: false/g );
-  //   done();
-  // } );
+  it( 'Create a presentation without multiplex if the user does not select that option', function( done ) {
+    assert.fileContent( 'config.yml', /multiplex: false/g );
+    done();
+  } );
 
 } );

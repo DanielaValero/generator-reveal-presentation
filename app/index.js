@@ -96,6 +96,8 @@ var presentationGenerator = module.exports = function presentationGenerator( arg
 
   this.appname = this.appname || path.basename( process.cwd() );
   this.appname = s.camelize( s.slugify( s.humanize( this.appname ) ) );
+
+
   //Set the directory where the files will be written
   if ( typeof this.env.options.appPath === 'undefined' ) {
     this.env.options.appPath = 'presentations/' + this.appname;
@@ -106,6 +108,8 @@ var presentationGenerator = module.exports = function presentationGenerator( arg
   var newDest = this.destinationPath( this.appPath );
   //This updates the destinationRoot with the value of our sub foldernpm
   this.destinationRoot(newDest);
+
+  this.config.set('newDest', newDest);
 
   this.option( 'skip-install', {
     desc: 'Whether dependencies should be installed',
