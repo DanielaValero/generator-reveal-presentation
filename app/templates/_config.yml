@@ -62,11 +62,11 @@ reveal:
   ## Bounds for smallest/largest possible scale to apply to content
   minScale: 0.35
   maxScale: 1.5
-  <% if (props.revealSettings[0].multiplex) { %>
+  <% if ( props.revealSettings.multiplex ) { %>
   #Enable multiplexin with socket.io
   multiplex:
-    socketId: <%= props.revealSettings.multimplex[0].socketId %>
-    secret: '<%= props.revealSettings.multiplex[0].secret %>'
+    socketId: <%= props.revealSettings.multiplex.socketId %>
+    secret: '<%= props.revealSettings.multiplex.secret %>'
     url: http://localhost:1947
    <% } else { %>
   multiplex: false

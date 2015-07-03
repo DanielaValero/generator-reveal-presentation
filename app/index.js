@@ -6,7 +6,8 @@ var yeoman = require( 'yeoman-generator' ),
   path = require( 'path' ),
   s = require( "underscore.string" ),
   fs = require( 'fs' ),
-  crypto = require( 'crypto' );
+  crypto = require( 'crypto' ),
+  _ = require( 'lodash' );
 
 /*
    Private functions
@@ -60,6 +61,25 @@ var prompts = [ {
   } ]
 } ];
 
+var createRevealSettingObject = function( props ) {
+  var revealSettings = {};
+  var multiplexKeys;
+  var tempObject = {};
+
+  props.revealSettings.map( function( current ) {
+    var tempSetting = {};
+    tempSetting[ current ] = true;
+    revealSettings = _.merge(revealSettings, tempSetting);
+  } );
+
+
+  if ( revealSettings.multiplex ) {
+    multiplexKeys = generateSocketKeys();
+    revealSettings.multiplex = _.merge({}, revealSettings.multiplex, multiplexKeys );
+  }
+
+  return revealSettings;
+}
 
 /*
    Create the generator
@@ -69,28 +89,20 @@ var prompts = [ {
 var presentationGenerator = module.exports = function presentationGenerator( args, options, config ) {
   yeoman.generators.Base.apply( this, arguments );
 
-   this.argument( 'appname', {
+  this.argument( 'appname', {
     type: String,
     required: true
   } );
 
   this.appname = this.appname || path.basename( process.cwd() );
-
   this.appname = s.camelize( s.slugify( s.humanize( this.appname ) ) );
-
-
-   //Set the directory where the files will be written
+  //Set the directory where the files will be written
   if ( typeof this.env.options.appPath === 'undefined' ) {
     this.env.options.appPath = 'presentations/' + this.appname;
     this.appPath = this.env.options.appPath;
   }
 
-  this.log(this.appPath);
-
-
-  this.destinationPath(this.appPath);
-
-
+  this.destinationPath( this.appPath );
   this.option( 'skip-install', {
     desc: 'Whether dependencies should be installed',
     defaults: true,
@@ -114,6 +126,10 @@ util.inherits( presentationGenerator, yeoman.generators.Base );
    Add the prompts
    ========================================================================== */
 
+/**
+ * Executes the propmt of the reveal config. Please note that revealSettings will be an array
+ * of strings, which will contain the strings the user has selected
+ **/
 presentationGenerator.prototype.askForRevealConfig = function askForRevealConfig() {
   var done = this.async();
 
@@ -124,15 +140,10 @@ presentationGenerator.prototype.askForRevealConfig = function askForRevealConfig
   } ) );
 
   this.prompt( prompts, function( props ) {
-
-    if ( props.revealSettings.multiplex ) {
-      props.revealSettings.multiplex = generateSocketKeys();
-    }
-
+    this.revealSettings = createRevealSettingObject( props );
     props.presentationName = this.appname;
-
     this.props = props;
-
+    this.props.revealSettings = _.merge( {}, this.props.revealSettings, this.revealSettings );
     done();
   }.bind( this ) );
 };
