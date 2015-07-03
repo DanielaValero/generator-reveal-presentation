@@ -29,6 +29,7 @@
     "yo": "^1.4.7"
   },
   "dependencies": {
+    "fs-extra": "^0.20.1",
     "yeoman-environment": "^1.2.5"
   },
   "licenses": [

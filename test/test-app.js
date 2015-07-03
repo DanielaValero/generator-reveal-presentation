@@ -3,28 +3,25 @@
 var path = require( 'path' );
 var helpers = require( 'yeoman-generator' ).test;
 var assert = require( 'yeoman-generator' ).assert;
-var fs = require( 'fs.extra' );
+var fs = require( 'fs-extra' );
 
 describe( 'Presentation Generator', function() {
 
+  /*
+     File creation test
+     ========================================================================== */
 
-  var appName = 'barbara';
-  var testDir = path.join( __dirname, './tmp/' );
+  before( function( done ) {
+    var appName = 'barbara';
+    var testDir = path.join( __dirname, 'tmp/' );
 
-
-  afterEach( function( done ) {
-    var testDir = path.join( __dirname, './tmp/' );
-    fs.rmrf( testDir, function( err ) {
+    fs.remove( testDir, function( err ) {
       if ( err ) {
         console.error( err );
       }
     } );
-    done();
-  } );
 
-
-  before( function( done ) {
-    var mockPrompt = {
+    var mockPrompt1 = {
       presentorPage: 'y',
       talkTitle: 'Foo bar baz',
       revealSettings: [ 'remote', 'multiplex' ]
@@ -33,11 +30,9 @@ describe( 'Presentation Generator', function() {
     helpers.run( path.join( __dirname, '../app' ) )
       .inDir( testDir )
       .withArguments( [ appName ] )
-      .withOptions( [ '--skip-install', '--skip-message' ] )
-      .withPrompts( mockPrompt )
+      .withPrompts( mockPrompt1 )
       .on( 'end', done );
   } );
-
 
 
   it( 'Create the new presentation files', function( done ) {
@@ -53,25 +48,28 @@ describe( 'Presentation Generator', function() {
   } );
 
 
-  before( function(done) {
-    var mockPrompt = {
-      presentorPage: 'y',
-      talkTitle: 'Foo bar baz',
-      revealSettings: [ 'remote' ]
-    };
 
-    helpers.run( path.join( __dirname, '../app' ) )
-      .inDir( testDir )
-      .withArguments( [ appName ] )
-      .withOptions( [ '--skip-install', '--skip-message' ] )
-      .withPrompts( mockPrompt )
-      .on( 'end', done );
-  } );
+  /*
+     Multiplex test
+     ========================================================================== */
+  // before( function( done ) {
+  //   var mockPrompt2 = {
+  //     presentorPage: 'y',
+  //     talkTitle: 'Foo bar baz',
+  //     revealSettings: [ 'remote' ]
+  //   };
 
-  it( 'Create a presentation without multiplex if the user does not select that option', function( done ) {
-    assert.fileContent( 'config.yml', /multiplex: false/g );
-    done();
+  //   helpers.run( path.join( __dirname, '../app' ) )
+  //     .inDir( testDir )
+  //     .withArguments( [ appName ] )
+  //     .withOptions( [ '--skip-install', '--skip-message' ] )
+  //     .withPrompts( mockPrompt2 )
+  //     .on( 'end', done );
+  // } );
 
-  } );
+  // it( 'Create a presentation without multiplex if the user does not select that option', function( done ) {
+  //   assert.fileContent( 'config.yml', /multiplex: false/g );
+  //   done();
+  // } );
 
 } );

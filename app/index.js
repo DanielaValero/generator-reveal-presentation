@@ -102,7 +102,11 @@ var presentationGenerator = module.exports = function presentationGenerator( arg
     this.appPath = this.env.options.appPath;
   }
 
-  this.destinationPath( this.appPath );
+  //This retrieves the path of the destinationRoot, concatenated with our new path.
+  var newDest = this.destinationPath( this.appPath );
+  //This updates the destinationRoot with the value of our sub foldernpm
+  this.destinationRoot(newDest);
+
   this.option( 'skip-install', {
     desc: 'Whether dependencies should be installed',
     defaults: true,
@@ -128,7 +132,8 @@ util.inherits( presentationGenerator, yeoman.generators.Base );
 
 /**
  * Executes the propmt of the reveal config. Please note that revealSettings will be an array
- * of strings, which will contain the strings the user has selected
+ * of strings, which will contain the strings the user has selected, so the first thing we will do
+ * is to convert that array into an object, so we can use it easier in the template.
  **/
 presentationGenerator.prototype.askForRevealConfig = function askForRevealConfig() {
   var done = this.async();
@@ -142,8 +147,10 @@ presentationGenerator.prototype.askForRevealConfig = function askForRevealConfig
   this.prompt( prompts, function( props ) {
     this.revealSettings = createRevealSettingObject( props );
     props.presentationName = this.appname;
+
     this.props = props;
-    this.props.revealSettings = _.merge( {}, this.props.revealSettings, this.revealSettings );
+    this.props.revealSettings = {};
+    this.props.revealSettings = _.merge( this.props.revealSettings , this.revealSettings );
     done();
   }.bind( this ) );
 };
