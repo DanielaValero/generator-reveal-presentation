@@ -56,6 +56,8 @@ This folder should be added in your assemble.io config, as pages to be built. Fo
 
 The master.hbs will be a copy of the index.hbs, but when you configure sockets, this will be the html the presenter will use, and the atendees, will use index.hbs, so, each time the presenter switches a slide, the atendees will have they current slide updated.
 
+If you decide to use sockets, the socket id and socket key, will be generated and added to the master page by the generator.
+
 
 
 
