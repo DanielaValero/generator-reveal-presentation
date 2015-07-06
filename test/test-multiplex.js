@@ -5,15 +5,9 @@ var helpers = require('yeoman-generator').test;
 var assert = require('yeoman-generator').assert;
 var fs = require('fs-extra');
 
-describe('Presentation Generator', function() {
-
+describe('Multiplex Test', function() {
     var appName = 'barbara';
     var testDir = path.join(__dirname, '.tmp/');
-
-
-    /*
-       File creation test
-       ========================================================================== */
 
     before(function(done) {
         fs.remove(testDir, function(err) {
@@ -21,29 +15,24 @@ describe('Presentation Generator', function() {
                 console.error(err);
             }
         });
-        var mockPrompt1 = {
+
+        var mockPrompt2 = {
             presentorPage: 'y',
             talkTitle: 'Foo bar baz',
-            revealSettings: ['remote', 'multiplex']
+            revealSettings: ['remote']
         };
 
         helpers.run(path.join(__dirname, '../app'))
             .inDir(testDir)
             .withArguments([appName])
-            .withPrompts(mockPrompt1)
+            .withOptions(['--skip-install', '--skip-message'])
+            .withPrompts(mockPrompt2)
             .on('end', done);
     });
 
-
-    it('Create the new presentation files', function(done) {
-        var expected = [
-            'config.yml',
-            'index.hbs',
-            'master.hbs',
-            'slides/slide.md'
-        ];
-        assert.file(expected);
-        assert.fileContent('config.yml', /socket.io/g);
+    it('Create a presentation without multiplex if the user does not select that option', function(done) {
+        assert.fileContent('config.yml', /multiplex: false/g);
         done();
     });
+
 });
