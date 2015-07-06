@@ -6,7 +6,7 @@ var assert = require('yeoman-generator').assert;
 var fs = require('fs-extra');
 
 describe('Multiplex Test', function() {
-    var appName = 'barbara';
+    var appName = 'new presentation';
     var testDir = path.join(__dirname, '.tmp/');
 
     before(function(done) {

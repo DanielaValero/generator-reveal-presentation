@@ -7,7 +7,7 @@ var fs = require('fs-extra');
 
 describe('Presentation Generator', function() {
 
-    var appName = 'barbara';
+    var appName = 'new-presentation';
     var testDir = path.join(__dirname, '.tmp/');
 
 
@@ -40,10 +40,11 @@ describe('Presentation Generator', function() {
             'config.yml',
             'index.hbs',
             'master.hbs',
-            'slides/slide.md'
+            'slides/0-slide-presentation-title.md'
         ];
         assert.file(expected);
         assert.fileContent('config.yml', /socket.io/g);
+        assert.fileContent('index.hbs', /newPresentation/g);
         done();
     });
 });
