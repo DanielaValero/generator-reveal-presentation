@@ -62,7 +62,7 @@ The master.hbs will be a copy of the index.hbs, but when you configure sockets, 
 If you decide to use sockets, the socket id and socket key, will be generated and added to the master page by the generator.
 
 
-#Roadmap
+# Roadmap
 
 * Add slide subgenerator
 * Support other presentation frameworks
